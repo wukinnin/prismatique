@@ -1,4 +1,3 @@
-// backend/app.js
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -14,9 +13,13 @@ app.use(express.json());
 
 // Routes
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+const officeRoutes = require('./routes/offices');
 const requestRoutes = require('./routes/requests');
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/offices', officeRoutes);
 app.use('/api/requests', requestRoutes);
 
 // Root route
