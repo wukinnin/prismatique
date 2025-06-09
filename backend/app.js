@@ -1,8 +1,8 @@
+// backend/app.js
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -19,7 +19,7 @@ const requestRoutes = require('./routes/requests');
 app.use('/api/auth', authRoutes);
 app.use('/api/requests', requestRoutes);
 
-// Root route - optional
+// Root route
 app.get('/', (req, res) => {
   res.send('Prismatique Backend is running!');
 });
