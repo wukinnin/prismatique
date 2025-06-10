@@ -1,14 +1,18 @@
-<!-- src/views/DashboardView.vue -->
 <template>
   <div class="dashboard">
+    <!-- Welcome Message -->
     <h2>Welcome, {{ user.name }}</h2>
-    <p>Rank: {{ user.rank }}</p>
-    <p>Office: {{ user.office_name }}</p>
 
-    <!-- Quick Stats -->
-    <div class="stats">
-      <h3>Quick Stats</h3>
-      <p>Pending Requests: {{ pendingRequestsCount }}</p>
+    <!-- Color Indicator + User Info -->
+    <div class="user-info">
+      <!-- Color Square -->
+      <div class="color-indicator" :style="{ backgroundColor: getColor(user.color) }"></div>
+      <div class="info-text">
+        <p><strong>Color:</strong> {{ user.color || 'N/A' }}</p>
+        <p><strong>Office:</strong> {{ user.office_name || 'N/A' }}</p>
+        <p><strong>Class:</strong> {{ user.office_class || 'N/A' }}</p>
+        <p><strong>Rank:</strong> {{ user.rank || 'N/A' }}</p>
+      </div>
     </div>
 
     <!-- Make a New Request Button (Only for Sender Heads) -->
@@ -35,25 +39,26 @@ export default {
   data() {
     return {
       user: JSON.parse(localStorage.getItem('user')) || {},
-      pendingRequestsCount: 0,
     };
   },
-  created() {
-    this.fetchPendingRequests();
-  },
   methods: {
-    async fetchPendingRequests() {
-      try {
-        const response = await api.get('/requests/user');
-        this.pendingRequestsCount = response.data.filter(req => req.status === 'Pending').length;
-      } catch (error) {
-        console.error('Failed to fetch requests:', error);
-      }
-    },
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       this.$router.push('/login');
+    },
+
+    // Map color names to hex values
+    getColor(colorName) {
+      const colors = {
+        Black: '#000000',
+        White: '#FFFFFF',
+        Blue: '#0074D9',
+        Purple: '#8E44AD',
+        Yellow: '#FFDC00',
+      };
+
+      return colors[colorName] || '#CCCCCC'; // Default if unknown
     },
   },
 };
@@ -70,12 +75,27 @@ export default {
   text-align: center;
 }
 
-.stats {
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  padding: 15px;
-  border-left: 4px solid #3498db;
-  border-radius: 4px;
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.color-indicator {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #333;
+  border-radius: 2px;
+}
+
+.info-text {
+  font-size: 16px;
+}
+
+.info-text p {
+  margin: 4px 0;
 }
 
 .actions {
@@ -83,7 +103,6 @@ export default {
 }
 
 .action-button {
-  display: inline-block;
   padding: 10px 20px;
   background-color: #3498db;
   color: white;
@@ -91,7 +110,6 @@ export default {
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  text-decoration: none;
 }
 
 .action-button:hover {
