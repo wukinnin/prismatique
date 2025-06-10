@@ -1,17 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getUserByRFIDSignature } = require('../models/user');
+const { verifyToken } = require('../config/jwt');
 
-// GET /api/users
-router.get('/', (req, res) => {
-  // Assume user is stored in session or JWT token later
-  const { user } = req.session || {};
-  
-  if (!user) {
-    return res.status(401).json({ error: 'User not authenticated' });
-  }
-
-  res.json(user);
+// GET /api/users - Protected by JWT
+router.get('/', verifyToken, (req, res) => {
+  res.json(req.user); // Returns the decoded JWT user data
 });
 
 module.exports = router;

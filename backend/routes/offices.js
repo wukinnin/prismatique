@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { getOfficeById } = require('../models/office');
+const { verifyToken } = require('../config/jwt');
 
-// GET /api/offices
-router.get('/', (req, res) => {
-  const { office_id } = req.session.user || {};
+router.get('/', verifyToken, (req, res) => {
+  const { office_id } = req.user;
 
   if (!office_id) {
     return res.status(401).json({ error: 'User not authenticated or no office assigned' });

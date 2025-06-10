@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { createSupplyRequest, getRequestsByRequesterId, updateRequestStatus } = require('../models/request');
+const { verifyToken } = require('../config/jwt');
 
 // POST /api/requests/create
-router.post('/create', (req, res) => {
+router.post('/create', verifyToken, (req, res) => {
   const { requester_id, sender_office_id, receiver_office_id, notes } = req.body;
 
   if (!requester_id || !sender_office_id || !receiver_office_id) {
@@ -21,8 +22,8 @@ router.post('/create', (req, res) => {
 });
 
 // GET /api/requests/user
-router.get('/user', (req, res) => {
-  const { user } = req.session || {};
+router.get('/user', verifyToken, (req, res) => {
+  const { user } = req;
 
   if (!user || !user.id) {
     return res.status(401).json({ error: 'User not authenticated' });
@@ -39,7 +40,7 @@ router.get('/user', (req, res) => {
 });
 
 // PUT /api/requests/update/:id
-router.put('/update/:id', (req, res) => {
+router.put('/update/:id', verifyToken, (req, res) => {
   const { id } = req.params;
   const { status, reviewed_by, review_notes } = req.body;
 

@@ -2,8 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const { getUserByRFIDSignature } = require('../models/user');
+const { generateToken } = require('../config/jwt');
 
-// POST /api/auth/login
 router.post('/login', async (req, res) => {
   const { digital_signature } = req.body;
 
@@ -18,11 +18,19 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid or unknown RFID signature' });
     }
 
-    // Return user info (excluding sensitive fields)
-    const { id, name, email, rank, office_id, office_name } = user;
+    const token = generateToken(user); // Generate JWT token
+
     return res.json({
       success: true,
-      user: { id, name, email, rank, office_id, office_name }
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        rank: user.rank,
+        office_id: user.office_id,
+        office_name: user.office_name
+      },
+      token
     });
 
   } catch (error) {
