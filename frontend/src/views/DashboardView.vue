@@ -12,7 +12,6 @@
       </li>
     </ul>
     <p v-else>No pending requests.</p>
-
     <router-link to="/request-form">Make a New Request</router-link>
     <br />
     <br>
@@ -57,7 +56,7 @@ export default {
 </script>
 
 
-<!-- <style scoped>
+<style scoped>
 .dashboard {
   max-width: 800px;
   margin: 50px auto;
@@ -66,4 +65,4 @@ export default {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-</style> -->
+</style>
