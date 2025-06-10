@@ -1,11 +1,11 @@
 // backend/models/user.js
 const pool = require('../config/db');
 
-// Get user by RFID digital signature
+// backend/models/user.js
 exports.getUserByRFIDSignature = async (signature) => {
   const [rows] = await pool.query(
-    `SELECT u.id, u.name, u.email, u.rank, u.office_id, o.name AS office_name 
-     FROM Users u 
+    `SELECT u.id, u.name, u.email, u.rank, o.id AS office_id, o.name AS office_name, o.class AS office_class
+     FROM Users u
      JOIN Office o ON u.office_id = o.id
      JOIN RFID r ON u.id = r.user_id
      WHERE r.digital_signature = ?`,
