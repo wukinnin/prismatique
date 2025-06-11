@@ -1,11 +1,7 @@
 <template>
-  <div class="dashboard">
-    <!-- Welcome Message -->
+  <div class="container">
     <h2>Welcome, {{ user.name }}</h2>
-
-    <!-- Color Indicator + User Info -->
     <div class="user-info">
-      <!-- Color Square -->
       <div class="color-indicator" :style="{ backgroundColor: getColor(user.color) }"></div>
       <div class="info-text">
         <p><strong>Color:</strong> {{ user.color || 'N/A' }}</p>
@@ -15,8 +11,9 @@
       </div>
     </div>
 
-    <!-- Make a New Request Button (Only for Sender Heads) -->
     <div class="actions">
+      <br>
+      <br>
       <button 
         @click="$router.push('/request-form')" 
         v-if="user.rank === 'Head' && user.office_class === 'Sender'"
@@ -24,10 +21,10 @@
       >
         Make a New Request
       </button>
+      <br>
+      <br>
+      <button @click="logout" class="logout-button">Log Out</button>
     </div>
-
-    <!-- Logout Button -->
-    <button @click="logout" class="logout-button">Logout</button>
   </div>
 </template>
 
@@ -96,38 +93,5 @@ export default {
 
 .info-text p {
   margin: 4px 0;
-}
-
-.actions {
-  margin-top: 30px;
-}
-
-.action-button {
-  padding: 10px 20px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.action-button:hover {
-  background-color: #2980b9;
-}
-
-.logout-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.logout-button:hover {
-  background-color: #c0392b;
 }
 </style>
