@@ -1,12 +1,13 @@
-<!-- src/views/RequestFormView.vue -->
 <template>
-  <div class="request-form">
+  <div class="container">
     <h2>Make a New Supply Request</h2>
     <form @submit.prevent="submitRequest">
+      <p><strong>Label Name (required)</strong></p>
       <label>
-        Item Name:
         <input type="text" v-model="item.name" required />
       </label>
+      <br>
+      <p><strong>Quantity (required)</strong></p>
 
       <label>
         Quantity:
@@ -24,6 +25,8 @@
       </label>
 
       <button type="submit">Submit Request</button>
+      <br>
+      <p v-if="message">{{ message }}</p>
     </form>
 
     <p v-if="message">{{ message }}</p>
