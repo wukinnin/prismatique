@@ -1,64 +1,64 @@
+// backend/routes/requests.js
 const express = require('express');
 const router = express.Router();
-const { createSupplyRequest, getRequestsByRequesterId, updateRequestStatus } = require('../models/request');
-const { verifyToken } = require('../config/jwt');
+const { createSupplyRequest, getRequestsByRequesterId } = require('../models/request');
 
-// POST /api/requests/create
-router.post('/create', verifyToken, (req, res) => {
-  const { requester_id, sender_office_id, receiver_office_id, notes } = req.body;
+/**
+ * POST /api/requests/create
+ * Submits a new supply request.
+ */
+router.post('/create', async (req, res) => {
+  const {
+    requester_id,
+    sender_office_id,
+    receiver_office_id,
+    notes,
+    items
+  } = req.body;
 
-  if (!requester_id || !sender_office_id || !receiver_office_id) {
+  if (!requester_id || !sender_office_id || !receiver_office_id || !items || items.length === 0) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  createSupplyRequest(requester_id, sender_office_id, receiver_office_id, notes)
-    .then(id => {
-      res.status(201).json({ message: 'Request created successfully', requestId: id });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to create request' });
+  try {
+    const requestId = await createSupplyRequest(
+      requester_id,
+      sender_office_id,
+      receiver_office_id,
+      notes,
+      items
+    );
+
+    return res.status(201).json({
+      message: '✅ Request created successfully!',
+      requestId
     });
+
+  } catch (error) {
+    console.error('Create Request Error:', error);
+    return res.status(500).json({ error: 'Failed to create request' });
+  }
 });
 
-// GET /api/requests/user
-router.get('/user', verifyToken, (req, res) => {
+/**
+ * GET /api/requests/user
+ * Gets all requests made by the current user.
+ */
+router.get('/user', async (req, res) => {
   const { user } = req;
 
   if (!user || !user.id) {
     return res.status(401).json({ error: 'User not authenticated' });
   }
 
-  getRequestsByRequesterId(user.id)
-    .then(requests => {
-      res.json(requests);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to fetch requests' });
-    });
-});
+  try {
+    const requests = await getRequestsByRequesterId(user.id);
+    return res.json(requests);
 
-// PUT /api/requests/update/:id
-router.put('/update/:id', verifyToken, (req, res) => {
-  const { id } = req.params;
-  const { status, reviewed_by, review_notes } = req.body;
-
-  if (!['Pending', 'Approved', 'Rejected'].includes(status)) {
-    return res.status(400).json({ error: 'Invalid status value' });
+  } catch (error) {
+    console.error('Get User Requests Error:', error);
+    return res.status(500).json({ error: 'Failed to fetch requests' });
   }
-
-  updateRequestStatus(id, status, reviewed_by, review_notes)
-    .then(success => {
-      if (!success) {
-        return res.status(404).json({ error: 'Request not found' });
-      }
-      res.json({ message: 'Request updated successfully' });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to update request' });
-    });
 });
 
 module.exports = router;
