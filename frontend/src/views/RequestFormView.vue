@@ -1,32 +1,37 @@
-<!-- src/views/RequestFormView.vue -->
 <template>
-  <div class="request-form">
+  <div class="container">
     <h2>Make a New Supply Request</h2>
     <form @submit.prevent="submitRequest">
+      <p><strong>Label Name (required)</strong></p>
       <label>
-        Item Name:
         <input type="text" v-model="item.name" required />
       </label>
-      <br />
+      <br>
+      <p><strong>Quantity (required)</strong></p>
       <label>
-        Quantity:
         <input type="number" v-model.number="item.quantity" required />
       </label>
-      <br />
+      <br>
+      <p><strong>Unit (optional)</strong></p>
       <label>
-        Unit:
-        <input type="text" v-model="item.unit" />
+        <input type="text" placeholder="Ream, Box, Set, etc." v-model="item.unit" />
       </label>
-      <br />
+      <br>
+      <p><strong>Notes (optional)</strong></p>
       <label>
-        Notes:
         <textarea v-model="item.notes"></textarea>
       </label>
-      <br />
+      <br>
+      <br>
       <button type="submit">Submit Request</button>
+      <br>
+      <p v-if="message">{{ message }}</p>
     </form>
-    <p v-if="message">{{ message }}</p>
-    <router-link to="/dashboard">Back to Dashboard</router-link>
+    <br>
+    <button 
+        @click="$router.push('/dashboard')">
+        Dashboard
+      </button>
   </div>
 </template>
 
@@ -83,21 +88,11 @@ export default {
 };
 </script>
 
-<!-- <style scoped>
-.request-form {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
+<style scoped>
 input,
 textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
+  width: 90%;
+  padding: 5px;
   font-size: 1rem;
 }
-</style> -->
+</style>

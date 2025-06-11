@@ -1,7 +1,6 @@
 <!-- src/views/LoginView.vue -->
 <template>
   <div class="container">
-    <h2>Prismatique</h2>
     <p>Simulate RFID Scan with <strong>Shift + [Number]</strong></p>
     <p>Example: <strong>Shift + 1</strong>, <strong>Shift + 2</strong>, etc.</p>
   </div>
