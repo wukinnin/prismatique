@@ -8,30 +8,30 @@
       </label>
       <br>
       <p><strong>Quantity (required)</strong></p>
-
       <label>
-        Quantity:
-        <input type="number" v-model.number="item.quantity" required min="1" />
+        <input type="number" v-model.number="item.quantity" required />
       </label>
-
+      <br>
+      <p><strong>Unit (optional)</strong></p>
       <label>
-        Unit:
-        <input type="text" v-model="item.unit" placeholder="e.g., Piece, Ream, Liter" required />
+        <input type="text" placeholder="Ream, Box, Set, etc." v-model="item.unit" />
       </label>
-
+      <br>
+      <p><strong>Notes (optional)</strong></p>
       <label>
-        Notes (Optional):
         <textarea v-model="item.notes"></textarea>
       </label>
-
+      <br>
+      <br>
       <button type="submit">Submit Request</button>
       <br>
       <p v-if="message">{{ message }}</p>
     </form>
-
-    <p v-if="message">{{ message }}</p>
-
-    <router-link to="/dashboard">Back to Dashboard</router-link>
+    <br>
+    <button 
+        @click="$router.push('/dashboard')">
+        Dashboard
+      </button>
   </div>
 </template>
 
@@ -81,7 +81,7 @@ export default {
           this.resetForm();
           setTimeout(() => {
             this.$router.push('/dashboard');
-          }, 1500);
+          }, 3000);
         }
       } catch (error) {
         console.error('Failed to submit request:', error);
@@ -101,62 +101,10 @@ export default {
 </script>
 
 <style scoped>
-.request-form {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: left;
-}
-
-form label {
-  display: block;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-form input,
-form textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
+input,
+textarea {
+  width: 90%;
+  padding: 5px;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-form textarea {
-  height: 80px;
-  resize: vertical;
-}
-
-button {
-  background-color: #3498db;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #2980b9;
-}
-
-p {
-  margin-top: 20px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-a {
-  display: inline-block;
-  margin-top: 20px;
-  text-decoration: none;
-  color: #3498db;
-  font-weight: bold;
 }
 </style>
